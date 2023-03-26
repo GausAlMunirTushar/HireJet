@@ -4,6 +4,9 @@ import cors from 'cors';
 import morgan from 'morgan';
 import connectDB from './config/database.js';
 
+// import routes
+import authRoutes from './routes/authRoutes.js';
+
 // dotenv config
 dotenv.config();
 
@@ -19,8 +22,6 @@ app.use(morgan('dev'))
 app.use(cors())
 
 // Routes
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+app.use('/api/v1/auth', authRoutes)
 
 export default app;
