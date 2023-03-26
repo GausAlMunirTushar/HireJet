@@ -1,38 +1,33 @@
 import userModel from "../models/userModel.js";
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
     try {
         const { name, email, password } = req.body;
         // validate
-        if(!name && !email && !password) {
-            return res.status(400).json({
-                success: false,
-                error: "Please provide all required fields",
-            });
+        if(!name) {
+            next('Name is required')
+        }
+        if(!email) {
+            next('Email is required')
+        }
+        if(!password) {
+            next('Password is required greather than 6 characters')
         }
         // check if user exists
         const exisitingUser = await userModel.findOne({ email });
         if(exisitingUser) {
-            return res.status(400).json({
-                success: false,
-                message: "User already exists",
-            });
+            next('Email Already Register Please Login')
         }
-        const user = await userModel.create({name,email,password,});
+        const user = await userModel.create({name, email, password});
         res.status(201).json({
             success: true,
             message: 'User created successfully',
             data: user,
         });
     } catch (error) {
-        console.log(error);
-        res.status(400).json({
-            success: false,
-            error: error.message,
-        });
+        next(error);
     }
 }
-
 
 export {
     register,
