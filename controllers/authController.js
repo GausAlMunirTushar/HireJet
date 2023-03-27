@@ -1,7 +1,6 @@
 import userModel from "../models/userModel.js";
 
 const register = async (req, res, next) => {
-    try {
         const { name, email, password } = req.body;
         // validate
         if(!name) {
@@ -24,11 +23,7 @@ const register = async (req, res, next) => {
             message: 'User created successfully',
             data: user,
         });
-    } catch (error) {
-        next(error);
-    }
 }
-
 export {
     register,
 }
