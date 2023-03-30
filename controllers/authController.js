@@ -18,12 +18,45 @@ const register = async (req, res, next) => {
             next('Email Already Register Please Login')
         }
         const user = await userModel.create({name, email, password});
+        // Token 
+        const token = user.generateToken();
         res.status(201).json({
             success: true,
             message: 'User created successfully',
             data: user,
+            token
         });
 }
+
+const login = async (req, res, next) => {
+    const { email, password } = req.body;
+    // validate
+    if(!email && !password) {
+        next('Email and Password is required')
+    }
+    // check if user exists find user
+    const user = await userModel.findOne({email}).select("+password")
+    if(!user) {
+        next('Invalid UserName or Password')
+    }
+    // compare password
+    const isMatch = await user.comparePassword(password)
+    if(!isMatch){
+        next('Invalid UserName or Password')
+    }
+    user.password = undefined;
+    const token = user.generateToken()
+    res.status(200).json({
+        success: true,
+        message: 'Login Successfully',
+        user,
+        token
+    })
+}
+
+
+
 export {
     register,
+    login
 }
