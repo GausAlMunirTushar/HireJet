@@ -7,6 +7,7 @@ import connectDB from './config/database.js';
 
 // import routes
 import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js'
 import errorMiddleware from './middlewares/errorMiddleware.js';
 
 // dotenv config
@@ -25,6 +26,7 @@ app.use(cors())
 
 // Routes
 app.use('/api/v1/auth', authRoutes)
+app.use('api/v1/user', userRoutes)
 
 // Error Middleware
 app.use(errorMiddleware)
